@@ -44,7 +44,7 @@ typedef struct ticketlock_struct {
 
 /*
  * try to acquire lock, if fail, spin until acquired
- * critical part is atomic
+ * critical parts are atomic
  */
 static inline void ticketlock_lock(ticketlock_t *t)
 {
@@ -60,6 +60,16 @@ static inline void ticketlock_lock(ticketlock_t *t)
 			: "cc", "eax", "ecx");
 }
 
+/*
+ * DO NOT USE
+ *
+ * this is for proof of concept only
+ *
+ * try to acquire lock once, if fail return nonzero, if succeed return 0
+ *
+ * this does not conform to 1st come 1st serve spirit of ticketlock so
+ * use ticketlock_lock instead
+ */
 static inline int ticketlock_trylock(ticketlock_t *t)
 {
 	register int ret;
