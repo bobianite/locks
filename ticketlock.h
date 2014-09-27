@@ -42,17 +42,46 @@ typedef struct ticketlock_struct {
 #define TICKETLOCK_LOCKED (ticketlock_t){.queue = 1, .dequeue = 0}
 #define TICKETLOCK_UNLOCKED (ticketlock_t){.queue = 0, .dequeue = 0}
 
-/* try to acquire lock, critical part is atomic */
+/*
+ * try to acquire lock, if fail, spin until acquired
+ * critical part is atomic
+ */
 static inline void ticketlock_lock(ticketlock_t *t)
 {
-	__asm__ __volatile__("movl $1, %%eax\n\t"
-			"lock xaddl %%eax, %[q]\n\t"
+	__asm__ __volatile__("movl $1, %%ecx\n\t"
+			"lock xaddl %%ecx, %[q]\n\t"
 			"1:\n\t"
-			"cmpl %%eax, %[d]\n\t"
+			"lock cmpxchgl %%eax, %[d]\n\t"
+			"cmpl %%eax, %%ecx\n\t"
+			"pause\n\t"
 			"jne 1b"
 			: [q] "+m" (t->queue)
 			: [d] "m" (t->dequeue)
-			: "cc", "eax");
+			: "cc", "eax", "ecx");
+}
+
+static inline int ticketlock_trylock(ticketlock_t *t)
+{
+	register int ret;
+
+	__asm__ __volatile__("lock cmpxchgl %%eax, %[q]\n\t"
+			"lock cmpxchgl %%eax, %[d]\n\t"
+			"jne 1f\n\t"
+			"movl %%eax, %%ecx\n\t"
+			"incl %%ecx\n\t"
+			"lock cmpxchgl %%ecx, %[q]\n\t"
+			"je 2f\n\t"
+			"1:\n\t"
+			"movl $-1, %[r]\n\t"
+			"jmp 3f\n\t"
+			"2:\n\t"
+			"xorl %[r], %[r]\n\t"
+			"3:"
+			: [q] "+m" (t->queue), [r] "=r" (ret)
+			: [d] "m" (t->dequeue)
+			: "cc", "eax", "ecx");
+
+	return ret;
 }
 
 /* release lock atomically */
