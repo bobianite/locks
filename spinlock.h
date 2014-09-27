@@ -8,8 +8,8 @@
  * Initialize your spinlock like "mylock = SPINLOCK_UNLOCKED;"
  * or "mylock = SPINLOCK_LOCKED;" accordingly
  *
- * Call "spinlock_trylock(&mylock);" to try to acquire the lock
- * spinlock_trylock will spin (infinite loop) and will not return until
+ * Call "spinlock_lock(&mylock);" to try to acquire the lock
+ * spinlock_lock will spin (infinite loop) and will not return until
  * lock is acquired
  *
  * Call "spinlock_unlock(&mylock);" to release the lock
@@ -23,7 +23,7 @@ typedef char spinlock_t;
 #define SPINLOCK_UNLOCKED 0
 
 /* try to acquire lock using atomic xchg, spin/retry if fail */
-static inline void spinlock_trylock(spinlock_t *lock)
+static inline void spinlock_lock(spinlock_t *lock)
 {
 	__asm__ __volatile__("1:\tmovb $1, %%al\n\t"
 			"xchgb %%al, %[lock]\n\t"
@@ -31,7 +31,7 @@ static inline void spinlock_trylock(spinlock_t *lock)
 			"jnz 1b"
 			: [lock] "+m" (*lock)
 			:
-			: "al");
+			: "cc", "al");
 }
 
 /* atomically release lock */
@@ -41,7 +41,7 @@ static inline void spinlock_unlock(spinlock_t *lock)
 			"xchgb %%al, %[lock]"
 			: [lock] "=m" (*lock)
 			:
-			: "al");
+			: "cc", "al");
 }
 
 #endif /* !_SPINLOCK_H_ */
