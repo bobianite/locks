@@ -34,11 +34,14 @@ static inline void spinlock_trylock(spinlock_t *lock)
 			: "al");
 }
 
-/* release lock */
+/* atomically release lock */
 static inline void spinlock_unlock(spinlock_t *lock)
 {
-	__asm__ __volatile__("movb $0, %[lock]"
-			: [lock] "=m" (*lock));
+	__asm__ __volatile__("xorb %%al, %%al\n\t"
+			"xchgb %%al, %[lock]"
+			: [lock] "=m" (*lock)
+			:
+			: "al");
 }
 
 #endif /* !_SPINLOCK_H_ */
