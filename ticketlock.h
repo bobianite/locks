@@ -25,6 +25,9 @@
  * Initialize your spinlock like "mylock = TICKETLOCK_UNLOCKED;"
  * or "mylock = TICKETLOCK_LOCKED;" accordingly
  *
+ * Never modify your spinlock after initializing, use only the following
+ * function calls:
+ *
  * Call "ticketlock_lock(&mylock);" to try to acquire the lock
  * ticketlock_lock will spin (infinite loop) and will not return until
  * lock is acquired
