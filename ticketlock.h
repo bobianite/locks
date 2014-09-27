@@ -23,7 +23,6 @@
  * Use "ticketlock_t mylock;" to declare your spinlock
  *
  * Initialize your spinlock like "mylock = TICKETLOCK_UNLOCKED;"
- * or "mylock = TICKETLOCK_LOCKED;" accordingly
  *
  * Call "ticketlock_lock(&mylock);" to try to acquire the lock
  * ticketlock_lock will spin (infinite loop) and will not return until
