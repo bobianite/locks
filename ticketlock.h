@@ -14,9 +14,10 @@
  * customers not currently being served by you spin around in circles to
  * cure their boredom.
  *
- * Locks prevent race conditions. Ticket lock is a fair, first-come
- * first-serve lock. A process trying to acquire the lock is a customer
- * trying to get a hold of you. Analogy follows.
+ * Locks prevent race conditions. Unlike oldschool spinlocks, ticket
+ * locks are fair, first-come first-serve locks. A process trying to
+ * acquire the lock is a customer trying to get a hold of you.  Analogy
+ * follows.
  */
 
 /*
