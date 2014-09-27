@@ -1,5 +1,5 @@
 /*
- * Stupid atomic spinlock for lolz
+ * Atomic spinlock for lolz
  *
  * Works on x86 or x64 architecture but use gcc, okay?
  *
