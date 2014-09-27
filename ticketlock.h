@@ -5,7 +5,7 @@
  * Copyright (C) 2014 Bryance Oyang
  *
  * Works on x86 or x64 architecture but use gcc, okay? (b/c gcc inline
- * assembly for atomic operations)
+ * assembly for atomic operations and preprocessor things)
  *
  * Wat is ticket lock?
  * You own a store. Every customer gets a unique ticket, a number. When
