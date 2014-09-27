@@ -39,8 +39,8 @@
 #define _TICKETLOCK_H_
 
 typedef struct ticketlock_struct {
-	int queue;
-	int dequeue;
+	__UINT32_TYPE__ queue;
+	__UINT32_TYPE__ dequeue;
 } ticketlock_t;
 
 #define TICKETLOCK_UNLOCKED (ticketlock_t){.queue = 0, .dequeue = 0}
@@ -73,9 +73,9 @@ static inline void ticketlock_lock(ticketlock_t *t)
  * this does not conform to 1st come 1st serve spirit of ticketlock so
  * use ticketlock_lock instead
  */
-static inline int ticketlock_trylock(ticketlock_t *t)
+static inline __UINT32_TYPE__ ticketlock_trylock(ticketlock_t *t)
 {
-	register int ret;
+	register __UINT32_TYPE__ ret;
 
 	__asm__ __volatile__("lock cmpxchgl %%eax, %[q]\n\t"
 			"lock cmpxchgl %%eax, %[d]\n\t"
