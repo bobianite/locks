@@ -2,6 +2,8 @@
  * Atomic ticketlock-based spinlock for lolz, inspired by Linux kernel's
  * own fancier ticket lock
  *
+ * Copyright (C) 2014 Bryance Oyang
+ *
  * Works on x86 or x64 architecture but use gcc, okay? (b/c gcc inline
  * assembly for atomic operations)
  *
@@ -20,10 +22,8 @@
 /*
  * Usage notes:
  *
- * Use "ticketlock_t mylock;" to declare your spinlock
- *
- * Initialize your spinlock like "mylock = TICKETLOCK_UNLOCKED;"
- * or "mylock = TICKETLOCK_LOCKED;" accordingly
+ * Use "ticketlock_t mylock = TICKETLOCK_UNLOCKED;" to declare your
+ * spinlock
  *
  * Never modify your spinlock after initializing, use only the following
  * function calls:
@@ -42,7 +42,7 @@ typedef struct ticketlock_struct {
 	int queue;
 	int dequeue;
 } ticketlock_t;
-#define TICKETLOCK_LOCKED (ticketlock_t){.queue = 1, .dequeue = 0}
+
 #define TICKETLOCK_UNLOCKED (ticketlock_t){.queue = 0, .dequeue = 0}
 
 /*
