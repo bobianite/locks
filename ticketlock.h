@@ -30,8 +30,8 @@
  * function calls:
  *
  * Call "ticketlock_lock(&mylock);" to try to acquire the lock
- * ticketlock_lock will spin (infinite loop) and will not return until
- * lock is acquired
+ * ticketlock_lock will spin (infinite loop), waiting in queue, and will
+ * not return until lock is acquired
  *
  * Call "ticketlock_unlock(&mylock);" to release the lock when done
  *
