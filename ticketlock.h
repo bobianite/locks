@@ -16,7 +16,7 @@
  *
  * Locks prevent race conditions. Unlike oldschool spinlocks, ticket
  * locks are fair, first-come first-serve locks. A thread trying to
- * acquire the lock is a customer trying to get a hold of you.  Analogy
+ * acquire the lock is a customer trying to get a hold of you. Analogy
  * follows.
  */
 
