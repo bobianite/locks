@@ -33,7 +33,11 @@
  * ticketlock_lock will spin (infinite loop) and will not return until
  * lock is acquired
  *
- * Call "ticketlock_unlock(&mylock);" to release the lock
+ * Call "ticketlock_unlock(&mylock);" to release the lock when done
+ *
+ * Always make sure ticketlock_lock and ticketlock_unlock come as pairs!
+ * Making a second call to ticketlock_lock from the same process before
+ * calling ticketlock_unlock will cause deadlock!
  */
 
 #ifndef _TICKETLOCK_H_
