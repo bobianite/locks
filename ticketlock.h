@@ -15,7 +15,7 @@
  * cure their boredom.
  *
  * Locks prevent race conditions. Unlike oldschool spinlocks, ticket
- * locks are fair, first-come first-serve locks. A process trying to
+ * locks are fair, first-come first-serve locks. A thread trying to
  * acquire the lock is a customer trying to get a hold of you.  Analogy
  * follows.
  */
@@ -36,7 +36,7 @@
  * Call "ticketlock_unlock(&mylock);" to release the lock when done
  *
  * Always make sure ticketlock_lock and ticketlock_unlock come as pairs!
- * Making a second call to ticketlock_lock from the same process before
+ * Making a second call to ticketlock_lock from the same thread before
  * calling ticketlock_unlock will cause deadlock!
  */
 
