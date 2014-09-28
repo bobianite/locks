@@ -43,6 +43,9 @@
 #ifndef _TICKETLOCK_H_
 #define _TICKETLOCK_H_
 
+#undef asm
+#define asm __asm__
+
 typedef struct ticketlock_struct {
 	__UINT32_TYPE__ queue;
 	__UINT32_TYPE__ dequeue;
@@ -56,7 +59,7 @@ typedef struct ticketlock_struct {
  */
 static inline void ticketlock_lock(ticketlock_t *t)
 {
-	__asm__ __volatile__("movl $1, %%ecx\n\t"
+	asm volatile("movl $1, %%ecx\n\t"
 			"lock xaddl %%ecx, %[q]\n\t"
 			"1:\n\t"
 			"lock cmpxchgl %%eax, %[d]\n\t"
@@ -82,7 +85,7 @@ static inline __UINT32_TYPE__ ticketlock_trylock(ticketlock_t *t)
 {
 	register __UINT32_TYPE__ ret;
 
-	__asm__ __volatile__("lock cmpxchgl %%eax, %[q]\n\t"
+	asm volatile("lock cmpxchgl %%eax, %[q]\n\t"
 			"lock cmpxchgl %%eax, %[d]\n\t"
 			"jne 1f\n\t"
 			"movl %%eax, %%ecx\n\t"
@@ -105,7 +108,7 @@ static inline __UINT32_TYPE__ ticketlock_trylock(ticketlock_t *t)
 /* release lock atomically */
 static inline void ticketlock_unlock(ticketlock_t *t)
 {
-	__asm__ __volatile__("lock incl %[d]"
+	asm volatile("lock incl %[d]"
 			: [d] "+m" (t->dequeue)
 			:
 			: "cc");
