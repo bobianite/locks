@@ -23,8 +23,8 @@
 /*
  * Usage notes:
  *
- * Use "ticketlock_t mylock = TICKETLOCK_UNLOCKED;" to declare your
- * spinlock
+ * Use "ticketlock_t mylock = TICKETLOCK_UNLOCKED;" to declare and
+ * initialize your spinlock
  *
  * Never modify your spinlock after initializing, use only the following
  * function calls:
