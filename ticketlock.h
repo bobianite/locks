@@ -68,7 +68,7 @@ static inline void ticketlock_lock(ticketlock_t *t)
 			"jne 1b"
 			: [q] "+m" (t->queue)
 			: [d] "m" (t->dequeue)
-			: "cc", "eax", "ecx");
+			: "memory", "cc", "eax", "ecx");
 }
 
 /*
@@ -100,7 +100,7 @@ static inline __UINT32_TYPE__ ticketlock_trylock(ticketlock_t *t)
 			"3:"
 			: [q] "+m" (t->queue), [r] "=r" (ret)
 			: [d] "m" (t->dequeue)
-			: "cc", "eax", "ecx");
+			: "memory", "cc", "eax", "ecx");
 
 	return ret;
 }
@@ -111,7 +111,7 @@ static inline void ticketlock_unlock(ticketlock_t *t)
 	asm volatile("lock incl %[d]"
 			: [d] "+m" (t->dequeue)
 			:
-			: "cc");
+			: "memory", "cc");
 }
 
 #endif /* !_TICKETLOCK_H_ */
